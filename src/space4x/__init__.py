@@ -8,7 +8,7 @@ import arcade
 from space4x.app import Application
 
 
-def main():
+def main() -> None:
     screen_width, screen_height = [
         int(0.8 * dim) for dim in arcade.get_display_size()
     ]
