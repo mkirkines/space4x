@@ -43,8 +43,9 @@ class Application(arcade.Window):
 
         self.set_mouse_visible(False)
 
-        self.example_image: Texture = arcade.load_texture(
-            ":resources:images/tiles/boxCrate_double.png"
+        self.hex: Texture = arcade.load_texture("resources/hex.png")
+        self.background: Texture = arcade.load_texture(
+            "resources/space_bg.png"
         )
 
     def setup(self) -> None:
@@ -56,29 +57,46 @@ class Application(arcade.Window):
         self.camera.use()
         self.clear()
 
-        for x in range(64, 1568, 128):
-            y = 64
-            width = 128
-            height = 128
-            arcade.draw_texture_rectangle(
-                center_x=x,
-                center_y=y,
-                width=width,
-                height=height,
-                texture=self.example_image,
-            )
-            arcade.draw_text(f"{x},{y}", x, y, color=arcade.color.WHITE)
-        arcade.draw_line(
-            start_x=0,
-            start_y=0,
-            end_x=self.screen_size[0],
-            end_y=self.screen_size[1],
-            color=arcade.color.WHITE,
+        arcade.draw_lrwh_rectangle_textured(
+            0, 0, *self.screen_size, self.background
         )
+
+        hex_width = 100
+        hex_height = 116
+        margin_x = 4
+        margin_y = 4
+        correction_x = 2
+        correction_y = 21
+        for x in range(0, 16):
+            for y in range(0, 16):
+                y_pos = y * (hex_height - (margin_y + correction_y))
+                if y % 2 == 0:
+                    x_pos = (
+                        x * (hex_width + margin_x)
+                        + hex_width // 2
+                        + correction_x
+                    )
+                    arcade.draw_scaled_texture_rectangle(
+                        center_x=x_pos,
+                        center_y=y_pos,
+                        texture=self.hex,
+                        scale=0.25,
+                    )
+                else:
+                    x_pos = x * (hex_width + margin_x)
+                    arcade.draw_scaled_texture_rectangle(
+                        center_x=x_pos,
+                        center_y=y_pos,
+                        texture=self.hex,
+                        scale=0.25,
+                    )
+                arcade.draw_text(
+                    f"({x}, {y})", x_pos, y_pos, color=arcade.color.WHITE
+                )
 
         world_pos = self.camera.mouse_coordinates_to_world(*self.mouse_pos)
         arcade.draw_circle_filled(
-            *world_pos, radius=10, color=arcade.color.WHITE
+            *world_pos, radius=5, color=arcade.color.WHITE
         )
 
     def on_update(self, delta_time: float):
