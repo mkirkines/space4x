@@ -8,6 +8,7 @@ from arcade.experimental.camera import Camera2D
 from arcade.texture import Texture
 
 import space4x.constants
+from space4x.hex_tile import HexTile
 import space4x.resources
 from space4x.hex_grid import HexGrid
 
@@ -55,6 +56,7 @@ class Application(arcade.Window):
         )
 
         self.hex_grid: HexGrid = HexGrid()
+        self.focussed_hex: HexTile = None  # type: ignore
 
     def setup(self) -> None:
         """Performs neccessary setup steps."""
@@ -84,8 +86,12 @@ class Application(arcade.Window):
     def on_update(self, delta_time: float) -> None:
         """Gets called every delta_time seconds."""
         collisions = arcade.check_for_collision_with_list(self.cursor, self.hex_grid)
-        for hex_tile in collisions:
-            hex_tile.set_texture(1)
+        if not (self.focussed_hex in collisions or len(collisions) == 0):
+            for hex_tile in collisions:
+                if self.focussed_hex:
+                    self.focussed_hex.set_texture(0)
+                hex_tile.set_texture(1)
+                self.focussed_hex = hex_tile  # type: ignore
 
     def on_mouse_motion(
         self, x: float, y: float, dx: float, dy: float
