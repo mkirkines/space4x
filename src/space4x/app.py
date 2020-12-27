@@ -8,9 +8,9 @@ from arcade.experimental.camera import Camera2D
 from arcade.texture import Texture
 
 import space4x.constants
-from space4x.hex_tile import HexTile
 import space4x.resources
 from space4x.hex_grid import HexGrid
+from space4x.hex_tile import HexTile
 
 
 class Application(arcade.Window):
@@ -85,7 +85,9 @@ class Application(arcade.Window):
 
     def on_update(self, delta_time: float) -> None:
         """Gets called every delta_time seconds."""
-        collisions = arcade.check_for_collision_with_list(self.cursor, self.hex_grid)
+        collisions = arcade.check_for_collision_with_list(
+            self.cursor, self.hex_grid
+        )
         if not (self.focussed_hex in collisions or len(collisions) == 0):
             for hex_tile in collisions:
                 if self.focussed_hex:

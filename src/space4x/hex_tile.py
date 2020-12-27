@@ -10,7 +10,9 @@ class HexTile(arcade.Sprite):
             filename=space4x.resources.hex_img,
             scale=space4x.constants.hex_tile_scale,
         )
-        self.append_texture(arcade.load_texture(space4x.resources.hex_highlighted_img))
+        self.append_texture(
+            arcade.load_texture(space4x.resources.hex_highlighted_img)
+        )
         self.id_x = id_x
         self.id_y = id_y
 
