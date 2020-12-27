@@ -1,7 +1,7 @@
 import nox
 
 python_version = "3.9"
-locations = "src", "tests", "noxfile.py"
+locations = "src", "tests"
 
 max_line_length = 75
 
@@ -10,7 +10,7 @@ max_line_length = 75
 def format(session):
     args = session.posargs or locations
     session.install("black", "isort", "docformatter", "reindent")
-    session.run("isort", "--atomic", "--recursive", *args)
+    session.run("isort", "--atomic", *args)
     session.run(
         "docformatter",
         "--wrap-summaries",
@@ -29,7 +29,7 @@ def format(session):
 def flake8(session):
     args = session.posargs or locations
     session.install("flake8", "flake8-import-order", "flake8-annotations")
-    session.run("flake8", *args)
+    session.run("flake8", "--ignore=ANN101", *args)
 
 
 @nox.session(python=python_version)
