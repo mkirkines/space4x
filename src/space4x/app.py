@@ -7,6 +7,10 @@ import arcade
 from arcade.experimental.camera import Camera2D
 from arcade.texture import Texture
 
+import space4x.constants
+import space4x.resources
+from space4x.hex_grid import HexGrid
+
 
 class Application(arcade.Window):
     def __init__(
@@ -43,16 +47,17 @@ class Application(arcade.Window):
 
         self.set_mouse_visible(False)
 
-        self.hex: Texture = arcade.load_texture("resources/hex.png")
         self.background: Texture = arcade.load_texture(
-            "resources/space_bg.png"
+            space4x.resources.bg_img
         )
+
+        self.hex_grid: HexGrid = HexGrid()
 
     def setup(self) -> None:
         """Performs neccessary setup steps."""
         pass
 
-    def on_draw(self):
+    def on_draw(self) -> None:
         """Gets called everytime something can be drawn to the screen."""
         self.camera.use()
         self.clear()
@@ -61,53 +66,30 @@ class Application(arcade.Window):
             0, 0, *self.screen_size, self.background
         )
 
-        hex_width = 100
-        hex_height = 116
-        margin_x = 4
-        margin_y = 4
-        correction_x = 2
-        correction_y = 21
-        for x in range(0, 16):
-            for y in range(0, 16):
-                y_pos = y * (hex_height - (margin_y + correction_y))
-                if y % 2 == 0:
-                    x_pos = (
-                        x * (hex_width + margin_x)
-                        + hex_width // 2
-                        + correction_x
-                    )
-                    arcade.draw_scaled_texture_rectangle(
-                        center_x=x_pos,
-                        center_y=y_pos,
-                        texture=self.hex,
-                        scale=0.25,
-                    )
-                else:
-                    x_pos = x * (hex_width + margin_x)
-                    arcade.draw_scaled_texture_rectangle(
-                        center_x=x_pos,
-                        center_y=y_pos,
-                        texture=self.hex,
-                        scale=0.25,
-                    )
-                arcade.draw_text(
-                    f"({x}, {y})", x_pos, y_pos, color=arcade.color.WHITE
-                )
+        for hex_tile in self.hex_grid:
+            x = hex_tile.id_x
+            y = hex_tile.id_y
+            x_pos = hex_tile.center_x
+            y_pos = hex_tile.center_y
+            arcade.draw_text(
+                f"({x}, {y})", x_pos, y_pos, color=arcade.color.WHITE
+            )
 
+        self.hex_grid.draw()
         world_pos = self.camera.mouse_coordinates_to_world(*self.mouse_pos)
         arcade.draw_circle_filled(
             *world_pos, radius=5, color=arcade.color.WHITE
         )
 
-    def on_update(self, delta_time: float):
+    def on_update(self, delta_time: float) -> None:
         """Gets called every delta_time seconds."""
         pass
 
-    def on_mouse_motion(self, x, y, dx, dy):
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int) -> None:
         """Gets called when the mouse is moved."""
         self.mouse_pos = x, y
 
-    def on_key_press(self, key, _modifiers):
+    def on_key_press(self, key, _modifiers) -> None:
         """Gets called when a key is pressed."""
         if key == arcade.key.F:
             self.set_fullscreen(not self.fullscreen)
