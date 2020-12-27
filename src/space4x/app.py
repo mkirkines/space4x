@@ -41,7 +41,10 @@ class Application(arcade.Window):
             projection=(0, self.screen_size[0], 0, self.screen_size[1]),
         )
         self.camera.use()
-        self.mouse_pos = 0, 0
+        self.cursor = arcade.Sprite(
+            filename=space4x.resources.cursor_img,
+            scale=space4x.constants.mouse_img_scale,
+        )
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -76,18 +79,21 @@ class Application(arcade.Window):
             )
 
         self.hex_grid.draw()
-        world_pos = self.camera.mouse_coordinates_to_world(*self.mouse_pos)
-        arcade.draw_circle_filled(
-            *world_pos, radius=5, color=arcade.color.WHITE
-        )
+        self.cursor.draw()
 
     def on_update(self, delta_time: float) -> None:
         """Gets called every delta_time seconds."""
-        pass
+        collisions = arcade.check_for_collision_with_list(self.cursor, self.hex_grid)
+        for hex_tile in collisions:
+            hex_tile.set_texture(1)
 
-    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int) -> None:
+    def on_mouse_motion(
+        self, x: float, y: float, dx: float, dy: float
+    ) -> None:
         """Gets called when the mouse is moved."""
-        self.mouse_pos = x, y
+        self.cursor.set_position(
+            *self.camera.mouse_coordinates_to_world(x, y)
+        )
 
     def on_key_press(self, key, _modifiers) -> None:
         """Gets called when a key is pressed."""
