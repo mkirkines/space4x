@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "space4x"
+version = "0.1.0"
+description = "A 4X space game."
+authors = ["Markus Kirkines"]
+license = "MIT"
+
+[tool.poetry.scripts]
+space4x = "space4x:main"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+arcade = "^2.4.3"
+numpy = "1.19.3"
+nox = "^2020.8.22"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.790"
+flake8 = "^3.8.4"
+pylama = "^7.7.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "C:\\Users\\marku\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\space4x-miPN6bG4-py3.9\\scripts\\python.exe",
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylamaEnabled": true
+}
