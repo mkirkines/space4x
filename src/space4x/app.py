@@ -9,8 +9,8 @@ from arcade.texture import Texture
 
 import space4x.constants
 import space4x.resources
-from space4x.hex_grid import HexGrid
-from space4x.hex_tile import HexTile
+from space4x.hex_grid import HexGrid, HexTile
+from space4x.star_field import StarField
 
 
 class Application(arcade.Window):
@@ -56,6 +56,7 @@ class Application(arcade.Window):
         )
 
         self.hex_grid: HexGrid = HexGrid()
+        self.star_field: StarField = StarField(self.hex_grid)
         self.focussed_hex: HexTile = None  # type: ignore
 
     def setup(self) -> None:
@@ -81,6 +82,7 @@ class Application(arcade.Window):
             )
 
         self.hex_grid.draw()
+        self.star_field.draw()
         self.cursor.draw()
 
     def on_update(self, delta_time: float) -> None:
