@@ -8,6 +8,7 @@ import space4x.resources
 
 class HexTile(arcade.Sprite):
     """A HexTile is the basic unit the game field consists of."""
+
     def __init__(self, id_x: int, id_y: int) -> None:
         """Creates a HexTile for a given integer coordinate.
 
@@ -45,17 +46,23 @@ class HexTile(arcade.Sprite):
                 space4x.constants.hex_tile_width
                 + space4x.constants.hex_grid_margin_x
             )
-        self.center_y = self.id_y * (
-            space4x.constants.hex_tile_height
-            - (
-                space4x.constants.hex_grid_margin_y
-                + space4x.constants.hex_grid_correction_y
+        self.center_y = (
+            space4x.constants.hex_grid_origin_offset
+            - self.id_y
+            * (
+                space4x.constants.hex_tile_height
+                - (
+                    space4x.constants.hex_grid_margin_y
+                    + space4x.constants.hex_grid_correction_y
+                )
             )
         )
 
 
 class HexGrid(arcade.SpriteList):
-    """A HexGrid is a collection of HexTiles that make up the game's field."""
+    """A HexGrid is a collection of HexTiles that make up the game's
+    field."""
+
     def __init__(self) -> None:
         """A Hex grid is iniatilized by creating [dim_x]x[dim_y] HexTiles.
 
