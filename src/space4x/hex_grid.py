@@ -1,6 +1,6 @@
 from typing import Iterator, List, Union
 
-import arcade
+import arcade  # type: ignore
 
 import space4x.constants
 import space4x.resources
@@ -60,8 +60,7 @@ class HexTile(arcade.Sprite):
 
 
 class HexGrid(arcade.SpriteList):
-    """A HexGrid is a collection of HexTiles that make up the game's
-    field.
+    """A HexGrid is a collection of HexTiles that make up the game's field.
 
     Uses the 'even-r' horizontal layout.
     """

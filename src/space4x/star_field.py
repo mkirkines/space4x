@@ -1,7 +1,7 @@
 from typing import Set
 
-import arcade
-import numpy as np
+import arcade  # type: ignore
+import numpy as np  # type: ignore
 
 import space4x.constants
 import space4x.resources

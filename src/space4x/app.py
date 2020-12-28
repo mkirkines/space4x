@@ -1,11 +1,11 @@
 # Installed packages
 from typing import Tuple, Union
 
-import arcade
+import arcade  # type: ignore
 
 # from arcade.application import View
-from arcade.experimental.camera import Camera2D
-from arcade.texture import Texture
+from arcade.experimental.camera import Camera2D  # type: ignore
+from arcade.texture import Texture  # type: ignore
 
 import space4x.constants
 import space4x.resources
@@ -113,7 +113,7 @@ class Application(arcade.Window):
 
     def on_mouse_press(
         self, x: float, y: float, button: int, modifiers: int
-    ):
+    ) -> None:
         if self.focussed_hex:
             pos_x = self.focussed_hex.id_x
             pos_y = self.focussed_hex.id_y
@@ -122,7 +122,7 @@ class Application(arcade.Window):
                 hex_tile = self.hex_grid.get_Tile_by_ID(*pos)
                 hex_tile.set_texture(1)  # type: ignore
 
-    def on_key_press(self, key, _modifiers) -> None:
+    def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""
         if key == arcade.key.F:
             self.set_fullscreen(not self.fullscreen)

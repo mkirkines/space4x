@@ -2,7 +2,7 @@
 # TODO: Fill
 
 # Installed packages
-import arcade
+import arcade  # type: ignore
 
 # Own packages
 from space4x.app import Application
