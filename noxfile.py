@@ -29,7 +29,7 @@ def format(session):
 def flake8(session):
     args = session.posargs or locations
     session.install("flake8", "flake8-import-order", "flake8-annotations")
-    session.run("flake8", "--ignore=ANN101", *args)
+    session.run("flake8", "--ignore=ANN101,W503", *args)
 
 
 @nox.session(python=python_version)
