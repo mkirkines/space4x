@@ -11,6 +11,7 @@ import space4x.constants
 import space4x.resources
 from space4x.hex_grid import HexGrid, HexTile
 from space4x.star_field import StarField
+from space4x.path_finder import find_path
 
 
 class Application(arcade.Window):
@@ -90,7 +91,12 @@ class Application(arcade.Window):
         collisions = arcade.check_for_collision_with_list(
             self.cursor, self.hex_grid
         )
-        if not (self.focussed_hex in collisions or len(collisions) == 0):
+        if len(collisions) == 0:
+            if self.focussed_hex:
+                self.focussed_hex.set_texture(0)
+                self.focussed_hex = None
+            return
+        if not (self.focussed_hex in collisions):
             for hex_tile in collisions:
                 if self.focussed_hex:
                     self.focussed_hex.set_texture(0)
@@ -104,6 +110,15 @@ class Application(arcade.Window):
         self.cursor.set_position(
             *self.camera.mouse_coordinates_to_world(x, y)
         )
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        if self.focussed_hex:
+            pos_x = self.focussed_hex.id_x
+            pos_y = self.focussed_hex.id_y
+            path = find_path(0, 0, pos_x, pos_y)
+            for pos in path:
+                hex_tile = self.hex_grid.get_Tile_by_ID(*pos)
+                hex_tile.set_texture(1)
 
     def on_key_press(self, key, _modifiers) -> None:
         """Gets called when a key is pressed."""
