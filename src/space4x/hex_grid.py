@@ -7,7 +7,10 @@ import space4x.resources
 
 
 class HexTile(arcade.Sprite):
-    """A HexTile is the basic unit the game field consists of."""
+    """A HexTile is the basic unit the game field consists of.
+
+    Uses the 'even-r' horizontal layout.
+    """
 
     def __init__(self, id_x: int, id_y: int) -> None:
         """Creates a HexTile for a given integer coordinate.
