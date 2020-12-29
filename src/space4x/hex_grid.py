@@ -9,18 +9,46 @@ import space4x.resources
 
 
 class OffsetCoordinate:
+    """Simple Wrapper class for 2D Coordinates."""
+
     def __init__(self, x: int, y: int) -> None:
+        """Initializes a 2D Coordinate.
+
+        Args:
+            x (int): x-Position
+            y (int): y-Position
+        """
         self.x = x
         self.y = y
 
 
 class OffsetHash(dict):
+    """A HashTable inheriting from dict for offset coordinates."""
+
     def get_identifier(self, x: int, y: int) -> str:
+        """Returns a unique identifier for offset coordinates.
+
+        Args:
+            x (int): x-Position
+            y (int): y-Position
+
+        Returns:
+            str: Identifier
+        """
         return f"x:{x},y:{y}"
 
 
 class CubeCoordinate:
+    """Simple Wrapper class for 3D Coordinates."""
+
     def __init__(self, x: int, y: int, z: int) -> None:
+        """Initializes a 3D Coordinate.
+
+        Args:
+            x (int): x-Position
+            y (int): y-Position
+            z (int): z-Position
+        """
         self.x = x
         self.y = y
         self.z = z
@@ -29,6 +57,14 @@ class CubeCoordinate:
     def from_offset_coordinate(
         cls, offset_coordinate: OffsetCoordinate
     ) -> CubeCoordinate:
+        """Creates a cube coordinate by converting an offset coordinate.
+
+        Args:
+            offset_coordinate (OffsetCoordinate): x, y coordinates (2D)
+
+        Returns:
+            CubeCoordinate: x, y, z (3D)
+        """
         x = (
             offset_coordinate.x
             - (offset_coordinate.y + (offset_coordinate.y & 1)) // 2
@@ -39,7 +75,19 @@ class CubeCoordinate:
 
 
 class CubeHash(dict):
+    """A HashTable inheriting from dict for cube coordinates."""
+
     def get_identifier(self, x: int, y: int, z: int) -> str:
+        """Returns a unique identifier for cube coordinates.
+
+        Args:
+            x (int): x-Position
+            y (int): y-Position
+            z (int): z-Position
+
+        Returns:
+            str: Identifier
+        """
         return f"x:{x},y:{y},z:{z}"
 
 
