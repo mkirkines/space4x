@@ -6,17 +6,30 @@ import space4x.constants
 import space4x.resources
 
 
+class OffsetCoordinate:
+    def __init__(self, x: int, y: int) -> None:
+        self.x = x
+        self.y = y
+
+
+class CubeCoordinate:
+    def __init__(self, x: int, y: int, z: int) -> None:
+        self.x = x
+        self.y = y
+        self.z = z
+
+
 class HexTile(arcade.Sprite):
     """A HexTile is the basic unit the game field consists of."""
 
-    def __init__(self, id_x: int, id_y: int) -> None:
+    def __init__(self, x: int, y: int) -> None:
         """Creates a HexTile for a given integer coordinate.
 
         The texture is loade and the position on the screen is calculated.
 
         Args:
-            id_x (int): x-Position
-            id_y (int): y-Position
+            x (int): x-Position
+            y (int): y-Position
         """
         super().__init__(
             filename=space4x.resources.hex_img,
@@ -28,12 +41,12 @@ class HexTile(arcade.Sprite):
 
         self.has_star = False
 
-        self.id_x = id_x
-        self.id_y = id_y
+        self.offset_coordinate = OffsetCoordinate(x, y)
+        self.cube_coordinate = self._get_cube_coordinate()
 
-        if self.id_y % 2 == 0:
+        if self.offset_coordinate.y & 1 == 0:
             self.center_x = (
-                self.id_x
+                self.offset_coordinate.x
                 * (
                     space4x.constants.hex_tile_width
                     + space4x.constants.hex_grid_margin_x
@@ -42,13 +55,13 @@ class HexTile(arcade.Sprite):
                 + space4x.constants.hex_grid_correction_x
             )
         else:
-            self.center_x = self.id_x * (
+            self.center_x = self.offset_coordinate.x * (
                 space4x.constants.hex_tile_width
                 + space4x.constants.hex_grid_margin_x
             )
         self.center_y = (
             space4x.constants.hex_grid_origin_offset
-            - self.id_y
+            - self.offset_coordinate.y
             * (
                 space4x.constants.hex_tile_height
                 - (
@@ -57,6 +70,12 @@ class HexTile(arcade.Sprite):
                 )
             )
         )
+
+    def _get_cube_coordinate(self):
+        x = self.offset_coordinate.x - (self.offset_coordinate.y + (self.offset_coordinate.y&1)) / 2
+        z = self.offset_coordinate.y
+        y = -x-z
+        return CubeCoordinate(x, y, z)
 
 
 class HexGrid(arcade.SpriteList):
@@ -73,20 +92,20 @@ class HexGrid(arcade.SpriteList):
         super().__init__()
         self.dim_x = space4x.constants.hex_grid_dim_x
         self.dim_y = space4x.constants.hex_grid_dim_y
-        self.tiles: List[List[Union[None, HexTile]]] = [
+        self.tiles_offset: List[List[Union[None, HexTile]]] = [
             [None for x in range(self.dim_x)] for y in range(self.dim_y)
         ]
         self._setup_grid()
 
     def _setup_grid(self) -> None:
         """Creates the HexTiles and appends them to the HexGrid."""
-        for id_x in range(0, self.dim_x):
-            for id_y in range(0, self.dim_y):
-                new_tile = HexTile(id_x=id_x, id_y=id_y)
+        for x in range(0, self.dim_x):
+            for y in range(0, self.dim_y):
+                new_tile = HexTile(x=x, y=y)
                 self.append(new_tile)
-                self.tiles[id_x][id_y] = new_tile
+                self.tiles_offset[x][y] = new_tile
 
-    def get_Tile_by_ID(self, idx: int, idy: int) -> Union[None, HexTile]:
+    def get_Tile_by_xy(self, x: int, y: int) -> Union[None, HexTile]:
         """Returns the HexTile for a given integer id.
 
         Args:
@@ -98,7 +117,7 @@ class HexGrid(arcade.SpriteList):
                                   None, if it does not exist.
         """
         try:
-            return self.tiles[idx][idy]
+            return self.tiles_offset[x][y]
         except IndexError:
             return None
 

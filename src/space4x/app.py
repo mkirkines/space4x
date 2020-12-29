@@ -74,12 +74,13 @@ class Application(arcade.Window):
         )
 
         for hex_tile in self.hex_grid:
-            x = hex_tile.id_x
-            y = hex_tile.id_y
-            x_pos = hex_tile.center_x
-            y_pos = hex_tile.center_y
+            x = hex_tile.cube_coordinate.x
+            y = hex_tile.cube_coordinate.y
+            z = hex_tile.cube_coordinate.z
+            x_pos = hex_tile.center_x - 35
+            y_pos = hex_tile.center_y - 5
             arcade.draw_text(
-                f"({x}, {y})", x_pos, y_pos, color=arcade.color.WHITE
+                f"({x}, {y}, {z})", x_pos, y_pos, color=arcade.color.WHITE
             )
 
         self.hex_grid.draw()
@@ -115,11 +116,11 @@ class Application(arcade.Window):
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
         if self.focussed_hex:
-            pos_x = self.focussed_hex.id_x
-            pos_y = self.focussed_hex.id_y
+            pos_x = self.focussed_hex.offset_coordinate.x
+            pos_y = self.focussed_hex.offset_coordinate.y
             path = find_path(0, 0, pos_x, pos_y)
             for pos in path:
-                hex_tile = self.hex_grid.get_Tile_by_ID(*pos)
+                hex_tile = self.hex_grid.get_Tile_by_xy(*pos)
                 hex_tile.set_texture(1)  # type: ignore
 
     def on_key_press(self, key: int, _modifiers: int) -> None:

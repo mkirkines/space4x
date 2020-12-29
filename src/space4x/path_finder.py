@@ -32,7 +32,7 @@ def find_path(
     while (dist := distance(current_x, current_y, x_end, y_end)) != 0:
         best_dist = 10e4
         best_pos: Union[None, Tuple[int, int]] = None
-        moves = even_moves if current_y % 2 == 0 else odd_moves
+        moves = even_moves if current_y & 1 == 0 else odd_moves
         path.append([current_x, current_y])
         for move in moves:
             new_pos: Tuple[int, int] = (
