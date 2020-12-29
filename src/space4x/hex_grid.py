@@ -95,9 +95,9 @@ class HexTile(arcade.Sprite):
     """A HexTile is the basic unit the game field consists of."""
 
     def __init__(self, x: int, y: int) -> None:
-        """Creates a HexTile for a given integer coordinate.
+        """Creates a HexTile for a given offset coordinate.
 
-        The texture is loade and the position on the screen is calculated.
+        The texture is loaded and the position on the screen is calculated.
 
         Args:
             x (int): x-Position
