@@ -1,4 +1,6 @@
-from typing import Iterator, List, Union
+from __future__ import annotations
+
+from typing import Iterator, Union
 
 import arcade  # type: ignore
 
@@ -12,11 +14,33 @@ class OffsetCoordinate:
         self.y = y
 
 
+class OffsetHash(dict):
+    def get_identifier(self, x: int, y: int) -> str:
+        return f"x:{x},y:{y}"
+
+
 class CubeCoordinate:
     def __init__(self, x: int, y: int, z: int) -> None:
         self.x = x
         self.y = y
         self.z = z
+
+    @classmethod
+    def from_offset_coordinate(
+        cls, offset_coordinate: OffsetCoordinate
+    ) -> CubeCoordinate:
+        x = (
+            offset_coordinate.x
+            - (offset_coordinate.y + (offset_coordinate.y & 1)) // 2
+        )
+        z = offset_coordinate.y
+        y = -x - z
+        return cls(x, y, z)
+
+
+class CubeHash(dict):
+    def get_identifier(self, x: int, y: int, z: int) -> str:
+        return f"x:{x},y:{y},z:{z}"
 
 
 class HexTile(arcade.Sprite):
@@ -42,7 +66,9 @@ class HexTile(arcade.Sprite):
         self.has_star = False
 
         self.offset_coordinate = OffsetCoordinate(x, y)
-        self.cube_coordinate = self._get_cube_coordinate()
+        self.cube_coordinate = CubeCoordinate.from_offset_coordinate(
+            offset_coordinate=self.offset_coordinate
+        )
 
         if self.offset_coordinate.y & 1 == 0:
             self.center_x = (
@@ -71,16 +97,6 @@ class HexTile(arcade.Sprite):
             )
         )
 
-    def _get_cube_coordinate(self):
-        x = (
-            self.offset_coordinate.x
-            - (self.offset_coordinate.y + (self.offset_coordinate.y & 1))
-            // 2
-        )
-        z = self.offset_coordinate.y
-        y = -x - z
-        return CubeCoordinate(x, y, z)
-
 
 class HexGrid(arcade.SpriteList):
     """A HexGrid is a collection of HexTiles that make up the game's field.
@@ -96,9 +112,8 @@ class HexGrid(arcade.SpriteList):
         super().__init__()
         self.dim_x = space4x.constants.hex_grid_dim_x
         self.dim_y = space4x.constants.hex_grid_dim_y
-        self.tiles_offset: List[List[Union[None, HexTile]]] = [
-            [None for x in range(self.dim_x)] for y in range(self.dim_y)
-        ]
+        self.offset_hash = OffsetHash()
+        self.cube_hash = CubeHash()
         self._setup_grid()
 
     def _setup_grid(self) -> None:
@@ -107,22 +122,57 @@ class HexGrid(arcade.SpriteList):
             for y in range(0, self.dim_y):
                 new_tile = HexTile(x=x, y=y)
                 self.append(new_tile)
-                self.tiles_offset[x][y] = new_tile
+                self.offset_hash[
+                    self.offset_hash.get_identifier(
+                        x=new_tile.offset_coordinate.x,
+                        y=new_tile.offset_coordinate.y,
+                    )
+                ] = new_tile
+                self.cube_hash[
+                    self.cube_hash.get_identifier(
+                        x=new_tile.cube_coordinate.x,
+                        y=new_tile.cube_coordinate.y,
+                        z=new_tile.cube_coordinate.z,
+                    )
+                ] = new_tile
 
     def get_Tile_by_xy(self, x: int, y: int) -> Union[None, HexTile]:
-        """Returns the HexTile for a given integer id.
+        """Returns the HexTile for a given offset coordinate.
 
         Args:
-            idx (int): x-Position
-            idy (int): y-Position
+            x (int): x-Position
+            y (int): y-Position
 
         Returns:
             Union[None, HexTile]: Returns the HexFile at the position or
                                   None, if it does not exist.
         """
         try:
-            return self.tiles_offset[x][y]
-        except IndexError:
+            return self.offset_hash[
+                self.offset_hash.get_identifier(x=x, y=y)
+            ]
+        except KeyError:
+            return None
+
+    def get_Tile_by_xyz(
+        self, x: int, y: int, z: int
+    ) -> Union[None, HexTile]:
+        """Returns the HexTile for a given cube coordinate.
+
+        Args:
+            x (int): x-Position
+            y (int): y-Position
+            z (int): z-Position
+
+        Returns:
+            Union[None, HexTile]: Returns the HexFile at the position or
+                                  None, if it does not exist.
+        """
+        try:
+            return self.cube_hash[
+                self.cube_hash.get_identifier(x=x, y=y, z=z)
+            ]
+        except KeyError:
             return None
 
     def __iter__(self) -> Iterator[HexTile]:
