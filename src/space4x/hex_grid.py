@@ -72,9 +72,13 @@ class HexTile(arcade.Sprite):
         )
 
     def _get_cube_coordinate(self):
-        x = self.offset_coordinate.x - (self.offset_coordinate.y + (self.offset_coordinate.y&1)) / 2
+        x = (
+            self.offset_coordinate.x
+            - (self.offset_coordinate.y + (self.offset_coordinate.y & 1))
+            // 2
+        )
         z = self.offset_coordinate.y
-        y = -x-z
+        y = -x - z
         return CubeCoordinate(x, y, z)
 
 
