@@ -10,7 +10,7 @@ from arcade.texture import Texture  # type: ignore
 import space4x.constants
 import space4x.resources
 from space4x.hex_grid import HexGrid, HexTile
-from space4x.path_finder import find_path
+from space4x.path_finder import PathFinder
 from space4x.star_field import StarField
 
 
@@ -58,6 +58,7 @@ class Application(arcade.Window):
 
         self.hex_grid: HexGrid = HexGrid()
         self.star_field: StarField = StarField(self.hex_grid)
+        self.path_finder: PathFinder = PathFinder(self.hex_grid)
         self.focussed_hex: Union[None, HexTile] = None  # type: ignore
 
     def setup(self) -> None:
@@ -115,12 +116,13 @@ class Application(arcade.Window):
     def on_mouse_press(
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
-        if self.focussed_hex:
-            pos_x = self.focussed_hex.offset_coordinate.x
-            pos_y = self.focussed_hex.offset_coordinate.y
-            path = find_path(0, 0, pos_x, pos_y)
-            for pos in path:
-                hex_tile = self.hex_grid.get_Tile_by_xy(*pos)
+        if (end_hex := self.focussed_hex) is not None:
+            start_hex = self.hex_grid.get_Tile_by_xy(x=1, y=4)
+            path = self.path_finder.breadth_first_search(
+                start_hex=start_hex,  # type: ignore
+                end_hex=end_hex,  # type: ignore
+            )
+            for hex_tile in path:
                 hex_tile.set_texture(1)  # type: ignore
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
