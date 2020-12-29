@@ -65,6 +65,9 @@ class PathFinder:
         came_from[start_hex] = None
         while not frontier.empty():
             current_tile = frontier.get()
+            # Early exit
+            if current_tile == end_hex:
+                break
             for next_tile in self.get_neighbors(hex_tile=current_tile):
                 if next_tile not in came_from:
                     frontier.put(next_tile)
