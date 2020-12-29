@@ -1,5 +1,5 @@
 # Installed packages
-from typing import Tuple, Union
+from typing import List, Tuple, Union
 
 import arcade  # type: ignore
 
@@ -60,6 +60,7 @@ class Application(arcade.Window):
         self.star_field: StarField = StarField(self.hex_grid)
         self.path_finder: PathFinder = PathFinder(self.hex_grid)
         self.focussed_hex: Union[None, HexTile] = None  # type: ignore
+        self.last_path: List[HexTile] = []
 
     def setup(self) -> None:
         """Performs neccessary setup steps."""
@@ -117,13 +118,19 @@ class Application(arcade.Window):
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
         if (end_hex := self.focussed_hex) is not None:
+            # Unmark the old path
+            for hex_tile in self.last_path:
+                hex_tile.set_texture(0)
+            # Get new path
             start_hex = self.hex_grid.get_Tile_by_xy(x=1, y=4)
             path = self.path_finder.breadth_first_search(
                 start_hex=start_hex,  # type: ignore
                 end_hex=end_hex,  # type: ignore
             )
+            # Mark new path
             for hex_tile in path:
                 hex_tile.set_texture(1)  # type: ignore
+            self.last_path = path
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""
