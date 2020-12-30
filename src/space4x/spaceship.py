@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 import arcade
 
@@ -19,17 +19,18 @@ class Spaceship(arcade.Sprite):
         self.cube_coordinate = hex_tile.cube_coordinate
         self.center_x = hex_tile.center_x
         self.center_y = hex_tile.center_y
-        self.path: Union[None, List[HexTile]] = None
+        self.path: List[HexTile] = []
 
     def update(self) -> None:
         super().update()
-        if self.path:
+        if not len(self.path) == 0:
             current_target: HexTile = self.path[0]
             if (current_target.center_x == self.center_x) and (
                 current_target.center_y == self.center_y
             ):
                 self.path.pop(0)
                 return
+            current_target.set_texture(0)
             self.offset_coordinate = current_target.offset_coordinate
             self.cube_coordinate = current_target.cube_coordinate
             self.center_x = current_target.center_x

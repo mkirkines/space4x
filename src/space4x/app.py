@@ -81,15 +81,15 @@ class Application(arcade.Window):
             0, 0, *self.screen_size, self.background
         )
 
-        for hex_tile in self.hex_grid:
-            x = hex_tile.cube_coordinate.x
-            y = hex_tile.cube_coordinate.y
-            z = hex_tile.cube_coordinate.z
-            x_pos = hex_tile.center_x - 35
-            y_pos = hex_tile.center_y - 5
-            arcade.draw_text(
-                f"({x}, {y}, {z})", x_pos, y_pos, color=arcade.color.WHITE
-            )
+        # for hex_tile in self.hex_grid:
+        #     x = hex_tile.cube_coordinate.x
+        #     y = hex_tile.cube_coordinate.y
+        #     z = hex_tile.cube_coordinate.z
+        #     x_pos = hex_tile.center_x - 35
+        #     y_pos = hex_tile.center_y - 5
+        #     arcade.draw_text(
+        #         f"({x}, {y}, {z})", x_pos, y_pos, color=arcade.color.WHITE
+        #     )
 
         self.hex_grid.draw()
         self.star_field.draw()
@@ -98,27 +98,28 @@ class Application(arcade.Window):
 
     def on_update(self, delta_time: float) -> None:
         """Gets called every delta_time seconds."""
-        collisions = arcade.check_for_collision_with_list(
-            self.cursor, self.hex_grid
-        )
-        if len(collisions) == 0:
-            return
-        # Unmark old path
-        for hex_tile in self.last_path:
-            hex_tile.set_texture(0)
-        # Get new path
-        start_hex = self.hex_grid.get_Tile_by_xy(
-            x=self.space_ship.offset_coordinate.x,
-            y=self.space_ship.offset_coordinate.y,
-        )
-        path = self.path_finder.a_star(
-            start_hex=start_hex,  # type: ignore
-            end_hex=collisions[0],  # type: ignore
-        )
-        # Mark new path
-        for hex_tile in path:
-            hex_tile.set_texture(1)  # type: ignore
-        self.last_path = path
+        if self.space_ship.path == []:
+            collisions = arcade.check_for_collision_with_list(
+                self.cursor, self.hex_grid
+            )
+            if len(collisions) == 0:
+                return
+            # Unmark old path
+            for hex_tile in self.last_path:
+                hex_tile.set_texture(0)
+            # Get new path
+            start_hex = self.hex_grid.get_Tile_by_xy(
+                x=self.space_ship.offset_coordinate.x,
+                y=self.space_ship.offset_coordinate.y,
+            )
+            path = self.path_finder.a_star(
+                start_hex=start_hex,  # type: ignore
+                end_hex=collisions[0],  # type: ignore
+            )
+            # Mark new path
+            for hex_tile in path:
+                hex_tile.set_texture(1)  # type: ignore
+            self.last_path = path
 
         self.space_ship.update()
 
@@ -133,6 +134,10 @@ class Application(arcade.Window):
     def on_mouse_press(
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
+        self.hex_grid.get_Tile_by_xy(
+            self.space_ship.offset_coordinate.x,
+            self.space_ship.offset_coordinate.y,
+        ).set_texture(0)  # type: ignore
         self.space_ship.set_path(self.last_path)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
