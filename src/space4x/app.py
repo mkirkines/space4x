@@ -184,7 +184,7 @@ class Application(arcade.Window):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
-    def on_key_release(self, key: int, _modifiers: int):
+    def on_key_release(self, key: int, _modifiers: int) -> None:
         if key == arcade.key.W:
             self.scroll_direction = (
                 self.scroll_direction[0],
