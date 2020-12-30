@@ -123,7 +123,7 @@ class Application(arcade.Window):
                 hex_tile.set_texture(1)  # type: ignore
             self.last_path = path
 
-        self.space_ship.update()
+        self.space_ship.update(delta_time=delta_time)
 
     def on_mouse_motion(
         self, x: float, y: float, dx: float, dy: float

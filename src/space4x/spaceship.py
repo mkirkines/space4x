@@ -20,9 +20,17 @@ class Spaceship(arcade.Sprite):
         self.center_x = hex_tile.center_x
         self.center_y = hex_tile.center_y
         self.path: List[HexTile] = []
+        self.timer: float = 0
 
-    def update(self) -> None:
+    def update(self, delta_time: float = 1/60) -> None:
         super().update()
+
+        self.timer += delta_time
+        if not self.timer > 1/space4x.constants.space_ship_speed:
+            return
+
+        self.timer = 0
+
         if not len(self.path) == 0:
             current_target: HexTile = self.path[0]
             if (current_target.center_x == self.center_x) and (
