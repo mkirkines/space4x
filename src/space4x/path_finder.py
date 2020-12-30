@@ -138,7 +138,9 @@ class PathFinder:
             if current_tile == end_hex:
                 break
             for next_tile in self.get_neighbors(hex_tile=current_tile):
-                new_cost = cost_so_far[current_tile] + 1
+                new_cost = (
+                    cost_so_far[current_tile] + 1
+                )  # TODO: Think about implementing path cost
                 if (
                     next_tile not in cost_so_far
                     or new_cost < cost_so_far[next_tile]
@@ -185,7 +187,9 @@ class PathFinder:
             if current_tile == end_hex:
                 break
             for next_tile in self.get_neighbors(hex_tile=current_tile):
-                new_cost = cost_so_far[current_tile] + 1
+                new_cost = (
+                    cost_so_far[current_tile] + 1
+                )  # TODO: Think about implementing path cost
                 if (
                     next_tile not in cost_so_far
                     or new_cost < cost_so_far[next_tile]
