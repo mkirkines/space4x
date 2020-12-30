@@ -6,8 +6,8 @@ hex_grid_margin_x = 4
 hex_grid_margin_y = 4
 hex_grid_correction_x = 2
 hex_grid_correction_y = 21
-hex_grid_dim_x = 20
-hex_grid_dim_y = 20
+hex_grid_dim_x = 100
+hex_grid_dim_y = 100
 hex_grid_origin_offset = 840
 
 mouse_img_scale = 0.03

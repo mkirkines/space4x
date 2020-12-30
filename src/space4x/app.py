@@ -37,7 +37,9 @@ class Application(arcade.Window):
             width=width, height=height, title=title, fullscreen=fullscreen
         )
         self.set_vsync(True)
+
         self.screen_size: Tuple[int, int] = self.get_size()
+        print(self.screen_size)
 
         self.camera = Camera2D(
             viewport=(0, 0, self.screen_size[0], self.screen_size[1]),
@@ -78,7 +80,7 @@ class Application(arcade.Window):
         self.clear()
 
         arcade.draw_lrwh_rectangle_textured(
-            0, 0, *self.screen_size, self.background
+            *self.camera.scroll, *self.screen_size, self.background
         )
 
         # for hex_tile in self.hex_grid:
@@ -150,6 +152,19 @@ class Application(arcade.Window):
                 self.get_size()[0],
                 self.get_size()[1],
             )
+
+        if key == arcade.key.W:
+            self.camera._scroll_y += space4x.constants.hex_tile_height * 5
+
+        if key == arcade.key.S:
+            self.camera._scroll_y -= space4x.constants.hex_tile_height * 5
+
+        # TODO: horizontal scrolling not working
+        if key == arcade.key.A:
+            self.camera._scroll_x -= space4x.constants.hex_tile_width * 5
+
+        if key == arcade.key.D:
+            self.camera._scroll_x += space4x.constants.hex_tile_width * 5
 
         if key == arcade.key.ESCAPE:
             arcade.close_window()
