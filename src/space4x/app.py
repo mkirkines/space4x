@@ -99,7 +99,7 @@ class Application(arcade.Window):
         for hex_tile in self.last_path:
             hex_tile.set_texture(0)
         # Get new path
-        start_hex = self.hex_grid.get_Tile_by_xy(x=0, y=0)
+        start_hex = self.hex_grid.get_Tile_by_xy(x=7, y=5)
         path = self.path_finder.a_star(
             start_hex=start_hex,  # type: ignore
             end_hex=collisions[0],  # type: ignore

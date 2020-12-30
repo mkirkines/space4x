@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from queue import PriorityQueue, Queue
-from typing import Any, Dict, List, Union
+from typing import Dict, List, Union
 
 from space4x.hex_grid import HexGrid, HexTile
 
@@ -11,9 +11,9 @@ from space4x.hex_grid import HexGrid, HexTile
 # This makes PriorityQueue compare only the priority.
 # See: https://docs.python.org/3/library/queue.html
 @dataclass(order=True)
-class PrioritizedItem:
+class PrioritizedHex:
     priority: float
-    item: Any = field(compare=False)
+    item: HexTile = field(compare=False)
 
 
 class PathFinder:
@@ -126,8 +126,8 @@ class PathFinder:
         Returns:
             List[HexTile]: HexTiles that make up the path
         """
-        frontier: PriorityQueue[PrioritizedItem] = PriorityQueue(maxsize=0)
-        frontier.put(PrioritizedItem(priority=0, item=start_hex))
+        frontier: PriorityQueue[PrioritizedHex] = PriorityQueue(maxsize=0)
+        frontier.put(PrioritizedHex(priority=0, item=start_hex))
         came_from: Dict[HexTile, Union[None, HexTile]] = dict()
         cost_so_far: Dict[HexTile, int] = dict()
         came_from[start_hex] = None
@@ -148,7 +148,7 @@ class PathFinder:
                     cost_so_far[next_tile] = new_cost
                     priority = new_cost
                     frontier.put(
-                        PrioritizedItem(priority=priority, item=next_tile)
+                        PrioritizedHex(priority=priority, item=next_tile)
                     )
                     came_from[next_tile] = current_tile
 
@@ -175,8 +175,8 @@ class PathFinder:
         Returns:
             List[HexTile]: HexTiles that make up the path
         """
-        frontier: PriorityQueue[PrioritizedItem] = PriorityQueue(maxsize=0)
-        frontier.put(PrioritizedItem(priority=0, item=start_hex))
+        frontier: PriorityQueue[PrioritizedHex] = PriorityQueue(maxsize=0)
+        frontier.put(PrioritizedHex(priority=0, item=start_hex))
         came_from: Dict[HexTile, Union[None, HexTile]] = dict()
         cost_so_far: Dict[HexTile, int] = dict()
         came_from[start_hex] = None
@@ -199,7 +199,7 @@ class PathFinder:
                         start_hex=next_tile, end_hex=end_hex
                     )
                     frontier.put(
-                        PrioritizedItem(priority=priority, item=next_tile)
+                        PrioritizedHex(priority=priority, item=next_tile)
                     )
                     came_from[next_tile] = current_tile
 
