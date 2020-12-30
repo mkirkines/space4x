@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterator, Union
+from typing import Iterator, Type, Union
 
 import arcade  # type: ignore
 
@@ -55,7 +55,7 @@ class CubeCoordinate:
 
     @classmethod
     def from_offset_coordinate(
-        cls, offset_coordinate: OffsetCoordinate
+        cls: Type[CubeCoordinate], offset_coordinate: OffsetCoordinate
     ) -> CubeCoordinate:
         """Creates a cube coordinate by converting an offset coordinate.
 
