@@ -9,7 +9,15 @@ from space4x.hex_grid import HexGrid, HexTile
 
 
 class Star(arcade.Sprite):
+    """A basic star class."""
+
     def __init__(self, center_x: int, center_y: int) -> None:
+        """Creates a star at a given (pixel) position.
+
+        Args:
+            center_x (int): pixel position x
+            center_y (int): pixel position y
+        """
         super().__init__(
             filename=space4x.resources.star_img,
             scale=space4x.constants.star_img_scale,
@@ -19,12 +27,20 @@ class Star(arcade.Sprite):
 
 
 class StarField(arcade.SpriteList):
+    """A star field consisting of multiple stars."""
+
     def __init__(self, hex_grid: HexGrid) -> None:
+        """Creates a star field on a given hex field.
+
+        Args:
+            hex_grid (HexGrid): Hex grid of the game
+        """
         super().__init__()
         self.hex_grid = hex_grid
         self._create_stars()
 
     def _create_stars(self) -> None:
+        """Initializes stars at random positions (hex tiles)."""
         number_of_hexes = len(self.hex_grid)
         number_of_stars = int(
             space4x.constants.star_to_hex_ratio * number_of_hexes
