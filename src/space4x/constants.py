@@ -12,6 +12,8 @@ hex_grid_origin_offset = 840
 
 mouse_img_scale = 0.03
 
+scroll_speed = 5
+
 star_img_scale = 0.5
 star_to_hex_ratio = 0.2
 

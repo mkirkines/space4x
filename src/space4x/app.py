@@ -50,6 +50,7 @@ class Application(arcade.Window):
             filename=space4x.resources.cursor_img,
             scale=space4x.constants.mouse_img_scale,
         )
+        self.scroll_direction = (0, 0)
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -100,6 +101,10 @@ class Application(arcade.Window):
 
     def on_update(self, delta_time: float) -> None:
         """Gets called every delta_time seconds."""
+
+        self.camera._scroll_x += self.scroll_direction[0]
+        self.camera._scroll_y += self.scroll_direction[1]
+
         if self.space_ship.path == []:
             collisions = arcade.check_for_collision_with_list(
                 self.cursor, self.hex_grid
@@ -136,10 +141,12 @@ class Application(arcade.Window):
     def on_mouse_press(
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
-        self.hex_grid.get_Tile_by_xy(
+        self.hex_grid.get_Tile_by_xy(  # type: ignore
             self.space_ship.offset_coordinate.x,
             self.space_ship.offset_coordinate.y,
-        ).set_texture(0)  # type: ignore
+        ).set_texture(
+            0
+        )
         self.space_ship.set_path(self.last_path)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
@@ -154,17 +161,53 @@ class Application(arcade.Window):
             )
 
         if key == arcade.key.W:
-            self.camera._scroll_y += space4x.constants.hex_tile_height * 5
+            self.scroll_direction = (
+                self.scroll_direction[0],
+                self.scroll_direction[1] + space4x.constants.scroll_speed,
+            )
 
         if key == arcade.key.S:
-            self.camera._scroll_y -= space4x.constants.hex_tile_height * 5
+            self.scroll_direction = (
+                self.scroll_direction[0],
+                self.scroll_direction[1] - space4x.constants.scroll_speed,
+            )
 
-        # TODO: horizontal scrolling not working
         if key == arcade.key.A:
-            self.camera._scroll_x -= space4x.constants.hex_tile_width * 5
+            self.scroll_direction = (
+                self.scroll_direction[0] - space4x.constants.scroll_speed,
+                self.scroll_direction[1],
+            )
 
         if key == arcade.key.D:
-            self.camera._scroll_x += space4x.constants.hex_tile_width * 5
+            self.scroll_direction = (
+                self.scroll_direction[0] + space4x.constants.scroll_speed,
+                self.scroll_direction[1],
+            )
 
         if key == arcade.key.ESCAPE:
             arcade.close_window()
+
+    def on_key_release(self, key: int, _modifiers: int):
+        if key == arcade.key.W:
+            self.scroll_direction = (
+                self.scroll_direction[0],
+                self.scroll_direction[1] - space4x.constants.scroll_speed,
+            )
+
+        if key == arcade.key.S:
+            self.scroll_direction = (
+                self.scroll_direction[0],
+                self.scroll_direction[1] + space4x.constants.scroll_speed,
+            )
+
+        if key == arcade.key.A:
+            self.scroll_direction = (
+                self.scroll_direction[0] + space4x.constants.scroll_speed,
+                self.scroll_direction[1],
+            )
+
+        if key == arcade.key.D:
+            self.scroll_direction = (
+                self.scroll_direction[0] - space4x.constants.scroll_speed,
+                self.scroll_direction[1],
+            )

@@ -163,13 +163,13 @@ class HexGrid(arcade.SpriteList):
         self.offset_hash = OffsetHash()
         self.cube_hash = CubeHash()
         self._setup_grid()
-        # TODO: Get boundaries (pixel) in _setup_grid, 
+        # TODO: Get boundaries (pixel) in _setup_grid,
         # so camera cannot scroll off the game board
 
     def _setup_grid(self) -> None:
         """Creates the HexTiles and appends them to the HexGrid."""
-        for x in range(-self.dim_x//2, self.dim_x//2):
-            for y in range(-self.dim_y//2, self.dim_y//2):
+        for x in range(-self.dim_x // 2, self.dim_x // 2):
+            for y in range(-self.dim_y // 2, self.dim_y // 2):
                 new_tile = HexTile(x=x, y=y)
                 self.append(new_tile)
                 self.offset_hash[

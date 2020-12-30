@@ -22,11 +22,11 @@ class Spaceship(arcade.Sprite):
         self.path: List[HexTile] = []
         self.timer: float = 0
 
-    def update(self, delta_time: float = 1/60) -> None:
+    def update(self, delta_time: float = 1 / 60) -> None:
         super().update()
 
         self.timer += delta_time
-        if not self.timer > 1/space4x.constants.space_ship_speed:
+        if not self.timer > 1 / space4x.constants.space_ship_speed:
             return
 
         self.timer = 0
