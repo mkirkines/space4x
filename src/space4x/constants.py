@@ -14,3 +14,5 @@ mouse_img_scale = 0.03
 
 star_img_scale = 0.5
 star_to_hex_ratio = 0.2
+
+space_ship_img_scale = 0.2

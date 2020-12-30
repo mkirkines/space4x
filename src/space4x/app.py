@@ -11,6 +11,7 @@ import space4x.constants
 import space4x.resources
 from space4x.hex_grid import HexGrid, HexTile
 from space4x.path_finder import PathFinder
+from space4x.spaceship import Spaceship
 from space4x.star_field import StarField
 
 
@@ -61,6 +62,12 @@ class Application(arcade.Window):
         self.path_finder: PathFinder = PathFinder(self.hex_grid)
         self.last_path: List[HexTile] = []
 
+        self.space_ship: Spaceship = Spaceship(
+            hex_grid=self.hex_grid,
+            x=7,
+            y=5,
+        )
+
     def setup(self) -> None:
         """Performs neccessary setup steps."""
         pass
@@ -86,6 +93,7 @@ class Application(arcade.Window):
 
         self.hex_grid.draw()
         self.star_field.draw()
+        self.space_ship.draw()
         self.cursor.draw()
 
     def on_update(self, delta_time: float) -> None:
@@ -99,7 +107,10 @@ class Application(arcade.Window):
         for hex_tile in self.last_path:
             hex_tile.set_texture(0)
         # Get new path
-        start_hex = self.hex_grid.get_Tile_by_xy(x=7, y=5)
+        start_hex = self.hex_grid.get_Tile_by_xy(
+            x=self.space_ship.offset_coordinate.x,
+            y=self.space_ship.offset_coordinate.y,
+        )
         path = self.path_finder.a_star(
             start_hex=start_hex,  # type: ignore
             end_hex=collisions[0],  # type: ignore
@@ -108,6 +119,8 @@ class Application(arcade.Window):
         for hex_tile in path:
             hex_tile.set_texture(1)  # type: ignore
         self.last_path = path
+
+        self.space_ship.update()
 
     def on_mouse_motion(
         self, x: float, y: float, dx: float, dy: float
@@ -120,7 +133,7 @@ class Application(arcade.Window):
     def on_mouse_press(
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
-        pass
+        self.space_ship.set_path(self.last_path)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""
