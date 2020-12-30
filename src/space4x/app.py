@@ -39,7 +39,6 @@ class Application(arcade.Window):
         self.set_vsync(True)
 
         self.screen_size: Tuple[int, int] = self.get_size()
-        print(self.screen_size)
 
         self.camera = Camera2D(
             viewport=(0, 0, self.screen_size[0], self.screen_size[1]),
@@ -144,9 +143,7 @@ class Application(arcade.Window):
         self.hex_grid.get_Tile_by_xy(  # type: ignore
             self.space_ship.offset_coordinate.x,
             self.space_ship.offset_coordinate.y,
-        ).set_texture(
-            0
-        )
+        ).set_texture(0)
         self.space_ship.set_path(self.last_path)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:

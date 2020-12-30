@@ -1,3 +1,4 @@
+import math
 from typing import List
 
 import arcade
@@ -39,6 +40,15 @@ class Spaceship(arcade.Sprite):
                 self.path.pop(0)
                 return
             current_target.set_texture(0)
+            self.angle = (
+                math.atan2(
+                    self.center_y - current_target.center_y,
+                    self.center_x - current_target.center_x,
+                )
+                * 180
+                / math.pi
+                + 90
+            )
             self.offset_coordinate = current_target.offset_coordinate
             self.cube_coordinate = current_target.cube_coordinate
             self.center_x = current_target.center_x
