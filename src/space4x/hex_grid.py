@@ -6,6 +6,7 @@ import arcade  # type: ignore
 
 import space4x.constants
 import space4x.resources
+from space4x.star import Star
 
 
 class OffsetCoordinate:
@@ -111,7 +112,7 @@ class HexTile(arcade.Sprite):
             arcade.load_texture(space4x.resources.hex_highlighted_img)
         )
 
-        self.has_star = False
+        self._star: Union[None, Star] = None
 
         self.offset_coordinate = OffsetCoordinate(x, y)
         self.cube_coordinate = CubeCoordinate.from_offset_coordinate(
@@ -144,6 +145,33 @@ class HexTile(arcade.Sprite):
                 )
             )
         )
+
+    def has_star(self) -> bool:
+        """Returns if the HexTile has a star on it.
+
+        Returns:
+            bool: True, if there is a star, otherwise False.
+        """
+        if self._star:
+            return True
+        else:
+            return False
+
+    def get_star(self) -> Union[None, Star]:
+        """Returns the star occupying the Hex, if it exists.
+
+        Returns:
+            Union[None, Star]: Occupying star or None
+        """
+        return self._star
+
+    def set_star(self, star: Star) -> None:
+        """Sets the star for the hex.
+
+        Args:
+            star (Star): a star that should live on the hex.
+        """
+        self._star = star
 
 
 class HexGrid(arcade.SpriteList):

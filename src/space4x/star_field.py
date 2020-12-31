@@ -6,24 +6,7 @@ import numpy as np  # type: ignore
 import space4x.constants
 import space4x.resources
 from space4x.hex_grid import HexGrid, HexTile
-
-
-class Star(arcade.Sprite):
-    """A basic star class."""
-
-    def __init__(self, center_x: int, center_y: int) -> None:
-        """Creates a star at a given (pixel) position.
-
-        Args:
-            center_x (int): pixel position x
-            center_y (int): pixel position y
-        """
-        super().__init__(
-            filename=space4x.resources.star_img,
-            scale=space4x.constants.star_img_scale,
-        )
-        self.center_x = center_x
-        self.center_y = center_y
+from space4x.star import Star
 
 
 class StarField(arcade.SpriteList):
@@ -55,7 +38,8 @@ class StarField(arcade.SpriteList):
                 hex_ids.add(hex_id)
         for hex_id in hex_ids:
             hex_tile: HexTile = self.hex_grid[hex_id]
-            hex_tile.has_star = True
             center_x = hex_tile.center_x
             center_y = hex_tile.center_y
-            self.append(Star(center_x=center_x, center_y=center_y))
+            new_star = Star(center_x=center_x, center_y=center_y)
+            self.append(new_star)
+            hex_tile.set_star(star=new_star)
