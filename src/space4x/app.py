@@ -1,5 +1,5 @@
 # Installed packages
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import arcade  # type: ignore
 
@@ -11,6 +11,7 @@ import space4x.constants
 import space4x.resources
 from space4x.hex_grid import HexGrid, HexTile
 from space4x.path_finder import PathFinder
+from space4x.popup_menu import PopupMenu
 from space4x.spaceship import Spaceship
 from space4x.star_field import StarField
 
@@ -70,6 +71,8 @@ class Application(arcade.Window):
             y=5,
         )
 
+        self.popup_menu: Union[None, PopupMenu] = None
+
     def setup(self) -> None:
         """Performs neccessary setup steps."""
         pass
@@ -96,6 +99,8 @@ class Application(arcade.Window):
         self.hex_grid.draw()
         self.star_field.draw()
         self.space_ship.draw()
+        if self.popup_menu:
+            self.popup_menu.draw()
         self.cursor.draw()
 
     def on_update(self, delta_time: float) -> None:
@@ -103,6 +108,9 @@ class Application(arcade.Window):
 
         self.camera._scroll_x += self.scroll_direction[0]
         self.camera._scroll_y += self.scroll_direction[1]
+
+        if self.popup_menu:
+            self.popup_menu.update()
 
         if self.space_ship.path == []:
             collisions = arcade.check_for_collision_with_list(
@@ -147,8 +155,7 @@ class Application(arcade.Window):
             ).set_texture(0)
             self.space_ship.set_path(self.last_path)
         if button == arcade.MOUSE_BUTTON_RIGHT:
-            # TODO: Implement opening menu here
-            pass
+            self.popup_menu = PopupMenu(self.cursor, self.camera)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""
