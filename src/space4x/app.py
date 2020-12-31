@@ -140,11 +140,15 @@ class Application(arcade.Window):
     def on_mouse_press(
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
-        self.hex_grid.get_Tile_by_xy(  # type: ignore
-            self.space_ship.offset_coordinate.x,
-            self.space_ship.offset_coordinate.y,
-        ).set_texture(0)
-        self.space_ship.set_path(self.last_path)
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.hex_grid.get_Tile_by_xy(  # type: ignore
+                self.space_ship.offset_coordinate.x,
+                self.space_ship.offset_coordinate.y,
+            ).set_texture(0)
+            self.space_ship.set_path(self.last_path)
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            # TODO: Implement opening menu here
+            pass
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""
