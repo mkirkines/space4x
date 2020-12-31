@@ -21,8 +21,7 @@ space_ship_img_scale = 0.3
 space_ship_speed = 10  # hexes per second
 
 popup_menu_bg_scale = 0.5
-popup_menu_button_bg_scale = 0.5
 popup_menu_exit_button_scale = 0.3
-popup_menu_exit_button_offset = 5
+popup_menu_exit_button_offset = 6
 popup_menu_default_x = 1100
 popup_menu_default_y = 430
