@@ -113,10 +113,14 @@ class Application(arcade.Window):
             self.popup_menu.update()
 
         if self.space_ship.path == []:
-            collisions = arcade.check_for_collision_with_list(
-                self.cursor, self.hex_grid
-            )
-            if len(collisions) == 0:
+            if (
+                len(
+                    collisions := arcade.check_for_collision_with_list(
+                        self.cursor, self.hex_grid
+                    )
+                )
+                == 0
+            ):
                 return
             # Unmark old path
             for hex_tile in self.last_path:
