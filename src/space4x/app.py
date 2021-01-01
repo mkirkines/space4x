@@ -158,7 +158,22 @@ class Application(arcade.Window):
             ).set_texture(0)
             self.space_ship.set_path(self.last_path)
         if button == arcade.MOUSE_BUTTON_RIGHT:
-            self.popup_menu = PopupMenu(self.cursor, self.camera)
+            if (
+                len(
+                    collisions := arcade.check_for_collision_with_list(
+                        self.cursor, self.hex_grid
+                    )
+                )
+                == 1
+            ):
+                if collisions[0].has_star():  # type: ignore
+                    star = collisions[0].get_star()  # type: ignore
+                    print(
+                        star.name,
+                        star.amount_iron_ore,
+                        star.amount_bio_mass,
+                    )
+                    self.popup_menu = PopupMenu(self.cursor, self.camera)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""

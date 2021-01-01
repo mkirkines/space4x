@@ -1,4 +1,5 @@
 import arcade  # type: ignore
+import numpy as np  # type: ignore
 
 import space4x.constants
 import space4x.resources
@@ -20,3 +21,9 @@ class Star(arcade.Sprite):
         )
         self.center_x = center_x
         self.center_y = center_y
+
+        self.name: str = "".join(
+            [chr(i) for i in np.random.randint(65, 91, 5)]
+        )
+        self.amount_iron_ore: int = np.random.randint(0, 1e4)
+        self.amount_bio_mass: int = np.random.randint(0, 1e4)
