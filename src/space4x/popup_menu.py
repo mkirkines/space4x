@@ -30,12 +30,6 @@ class PopupMenu(arcade.SpriteList):
     def update(self):
         super().update()
         self._update_positions()
-        if arcade.check_for_collision(self.cursor, self.exit_button):
-            for sprite in self:
-                self.remove(sprite)
-                sprite.kill()
-                del sprite
-            del self
 
     def _update_positions(self) -> None:
         self.bg.set_position(
@@ -54,3 +48,15 @@ class PopupMenu(arcade.SpriteList):
             - self.exit_button.height // 2
             - space4x.constants.popup_menu_exit_button_offset,
         )
+
+    def process_mouse_click(self) -> bool:
+        if arcade.check_for_collision(self.cursor, self.bg):
+            if arcade.check_for_collision(self.cursor, self.exit_button):
+                while len(self) > 0:
+                    sprite = self.pop(index=0)
+                    sprite.kill()
+                    del sprite
+                del self
+            return True
+        else:
+            return False

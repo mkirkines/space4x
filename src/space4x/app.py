@@ -149,6 +149,9 @@ class Application(arcade.Window):
         self, x: float, y: float, button: int, modifiers: int
     ) -> None:
         if button == arcade.MOUSE_BUTTON_LEFT:
+            if self.popup_menu:
+                if self.popup_menu.process_mouse_click():
+                    return
             self.hex_grid.get_Tile_by_xy(  # type: ignore
                 self.space_ship.offset_coordinate.x,
                 self.space_ship.offset_coordinate.y,
