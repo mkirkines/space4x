@@ -27,3 +27,15 @@ class Star(arcade.Sprite):
         )
         self.amount_iron_ore: int = np.random.randint(0, 1e4)
         self.amount_bio_mass: int = np.random.randint(0, 1e4)
+
+        self.timer: float = 0
+
+    def update(self, delta_time: float = 1 / 60) -> None:
+        if not self.timer >= 1:
+            self.timer += delta_time
+            return
+        if self.amount_iron_ore > 0:
+            self.amount_iron_ore -= 1
+        if self.amount_bio_mass > 0:
+            self.amount_bio_mass -= 1
+        self.timer = 0

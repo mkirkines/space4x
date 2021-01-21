@@ -1,4 +1,4 @@
-from typing import Set
+from typing import Iterator, Set
 
 import arcade  # type: ignore
 import numpy as np  # type: ignore
@@ -43,3 +43,12 @@ class StarField(arcade.SpriteList):
             new_star = Star(center_x=center_x, center_y=center_y)
             self.append(new_star)
             hex_tile.set_star(star=new_star)
+
+    def __iter__(self) -> Iterator[Star]:
+        """Return an iterable object of sprites."""
+        return iter(self.sprite_list)
+
+    def update(self, delta_time: float = 1 / 60) -> None:
+        """Updates every star in the star field."""
+        for star in self.sprite_list:
+            star.update(delta_time=delta_time)
