@@ -140,6 +140,7 @@ class Application(arcade.Window):
             self.last_path = path
 
         self.space_ship.update(delta_time=delta_time)
+        self.star_field.update(delta_time=delta_time)
 
     def on_mouse_motion(
         self, x: float, y: float, dx: float, dy: float
@@ -172,12 +173,9 @@ class Application(arcade.Window):
             ):
                 if collisions[0].has_star():  # type: ignore
                     star = collisions[0].get_star()  # type: ignore
-                    print(
-                        star.name,
-                        star.amount_iron_ore,
-                        star.amount_bio_mass,
+                    self.popup_menu = PopupMenu(
+                        cursor=self.cursor, camera=self.camera, star=star
                     )
-                    self.popup_menu = PopupMenu(self.cursor, self.camera)
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""
