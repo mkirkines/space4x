@@ -197,12 +197,26 @@ class Application(arcade.Window):
         """
         if buttons == arcade.MOUSE_BUTTON_LEFT:
             if self.popup_menu:
-                if self.popup_menu.process_mouse_click():
+                if self.popup_menu.dragged:
                     self.popup_menu.pos_x += int(dx)
                     self.popup_menu.pos_y += int(dy)
         self.cursor.set_position(
             *self.camera.mouse_coordinates_to_world(x, y)
         )
+
+    def on_mouse_release(
+        self, x: float, y: float, button: int, modifiers: int
+    ):
+        """Actions to perform on mouse release
+
+        Args:
+            x (float): mouse pos x
+            y (float): mouse pos y
+            button (int): button clicked
+            modifiers (int): modifier button
+        """
+        if self.popup_menu:
+            self.popup_menu.dragged = False
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""

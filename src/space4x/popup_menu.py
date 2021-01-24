@@ -47,6 +47,8 @@ class PopupMenu(arcade.SpriteList):
         self.append(self.bg)
         self.append(self.exit_button)
 
+        self.dragged = False
+
     def draw(self) -> None:  # type: ignore
         """Draws the popup menu."""
         super().draw()
@@ -83,6 +85,8 @@ class PopupMenu(arcade.SpriteList):
                 while len(self.sprite_list) > 0:
                     self.sprite_list.pop()
                 del self
+                return True
+            self.dragged = True
             return True
         else:
             return False
