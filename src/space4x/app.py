@@ -108,7 +108,6 @@ class Application(arcade.Window):
 
         self.camera._scroll_x += self.scroll_direction[0]
         self.camera._scroll_y += self.scroll_direction[1]
-
         if self.popup_menu:
             self.popup_menu.update()
 
@@ -176,6 +175,34 @@ class Application(arcade.Window):
                     self.popup_menu = PopupMenu(
                         cursor=self.cursor, camera=self.camera, star=star
                     )
+
+    def on_mouse_drag(
+        self,
+        x: float,
+        y: float,
+        dx: float,
+        dy: float,
+        buttons: int,
+        modifiers: int,
+    ) -> None:
+        """Processed mouse drags.
+
+        Args:
+            x (float): mouse pos x
+            y (float): mouse pos y
+            dx (float): delta x
+            dy (float): dy
+            buttons (int): button id
+            modifiers (int): modifier button
+        """
+        if buttons == arcade.MOUSE_BUTTON_LEFT:
+            if self.popup_menu:
+                if self.popup_menu.process_mouse_click():
+                    self.popup_menu.pos_x += int(dx)
+                    self.popup_menu.pos_y += int(dy)
+        self.cursor.set_position(
+            *self.camera.mouse_coordinates_to_world(x, y)
+        )
 
     def on_key_press(self, key: int, _modifiers: int) -> None:
         """Gets called when a key is pressed."""

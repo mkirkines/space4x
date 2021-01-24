@@ -40,6 +40,8 @@ class PopupMenu(arcade.SpriteList):
             scale=space4x.constants.popup_menu_exit_button_scale,
         )
         # set positions
+        self.pos_x = space4x.constants.popup_menu_default_x
+        self.pos_y = space4x.constants.popup_menu_default_y
         self._update_positions()
         # append to sprite list (order imported for drawing)
         self.append(self.bg)
@@ -59,10 +61,8 @@ class PopupMenu(arcade.SpriteList):
         """Updates the positions of the menu elements."""
         # TODO: find better way for positioning
         self.bg.set_position(
-            center_x=self.camera.scroll_x
-            + space4x.constants.popup_menu_default_x,
-            center_y=self.camera.scroll_y
-            + space4x.constants.popup_menu_default_y,
+            center_x=self.camera.scroll_x + self.pos_x,
+            center_y=self.camera.scroll_y + self.pos_y,
         )
 
         self.exit_button.set_position(
