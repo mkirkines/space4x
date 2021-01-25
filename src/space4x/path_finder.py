@@ -56,7 +56,8 @@ class PathFinder:
                     z=hex_tile.cube_coordinate.z + direction[2],
                 )
             ) is not None:
-                neighbors.append(neighbor)
+                if not neighbor.has_star():
+                    neighbors.append(neighbor)
         return neighbors
 
     def heuristic(self, start_hex: HexTile, end_hex: HexTile) -> float:

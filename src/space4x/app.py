@@ -121,6 +121,8 @@ class Application(arcade.Window):
                 == 0
             ):
                 return
+            if collisions[0].has_star():  # type: ignore
+                return
             # Unmark old path
             for hex_tile in self.last_path:
                 hex_tile.set_texture(0)
