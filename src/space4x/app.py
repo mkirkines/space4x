@@ -16,6 +16,7 @@ from space4x.spaceship import Spaceship
 from space4x.star_field import StarField
 
 
+# TODO: Make game class, and make Application class "light-weight"
 class Application(arcade.Window):
     def __init__(
         self,
@@ -123,6 +124,10 @@ class Application(arcade.Window):
                 return
             if collisions[0].has_star():  # type: ignore
                 return
+
+            # TODO: seperate path validation into its own function or class
+            # Also for for considering range
+
             # Unmark old path
             for hex_tile in self.last_path:
                 hex_tile.set_texture(0)
